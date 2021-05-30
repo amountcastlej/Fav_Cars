@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorite Cars</title>
+</head>
+<body>
+    <h1>Welcome {{this_user.first_name}}</h1>
+    <a href="/logout">Logout</a>
+    <h1>{{car.make}}</h1>
+    <p>Added by: {{car.uploaded_by.first_name}} {{car.uploaded_by.last_name}}</p>
+    <p>Added on: {{car.created_at}}</p>
+    <p>Last Updated on: {{car.updated_at}}</p>
+    {% if car.uploaded_by.id != user.id %}
+    <p>Model: {{car.model}}</p>
+    {% else %}
+    <form action="/update/{{car.id}}" method="POST":>
+        {% csrf_token %}
+        <label for="make">Make</label>
+        <input type="text" name="make" id="make" value="{{car.make}}">
+        <p>added by {{car.uploaded_by.first_name}} {{car.uploaded_by.last_name}}</p>
+        <p>added on {{car.created_at}}</p>
+        <p>last updated {{car.updated_at}}</p>
+        <label for="model">Model</label>
+        <input type="text" name="model" id="model" value="{{car.model}}">
+        <input type="submit" name="update">
+    </form>
+    <a href="delete/{{car.id}}"><button>Delete</button></a>
+    {% endif %}
+    {% for user in car.users_who_like.all %}
+        {{user.first_name}} {{user.last_name}}
+    {% endfor %}
+    <p><a href="/cars">Back to All Cars</a></p>
+    <p><a href="/like/{{car.id}}">Add to likes</a></p>
+    <p><a href="">Remove from likes</a></p>
+
+</body>
+</html>
